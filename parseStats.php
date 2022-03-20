@@ -13,14 +13,16 @@ $thegroup=[
   "MERCEDES","HYUNDAI","PEUGEOT","OPEL","MAZDA","DACIA","CITROEN","SUBARU","HONDA","FIAT",
   "SEAT","MITSUBISHI","SUZUKI","CHEVROLET","LEXUS","MINI","LAND ROVER","LANCIA","PORSCHE","JEEP",
   "JAGUAR","ALFA ROMEO","TESLA","SMART","DODGE","LADA","MASERATI","ISUZU","IVECO","SSANGYONG",
-  "BENTLEY","ASTON MARTIN","CADILLAC","MAN"
+  "BENTLEY","ASTON MARTIN","CADILLAC","MAN","LAMBORGHINI","MORGAN","FERRARI","LOTUS","ROLLS-ROYCE","DS",
+  "NEVS","MAYBACH","Alpine","Polestar","LYNK & CO","MAXUS","MG","MCLAREN","TRI-STAR"
 ];
 $ingroup=[
   "VW","Geely","BMW","Toyota","Hyundai Motor Group","VW","VW","Renault-Nissan-Mitsubishi Alliance","Ford","Renault-Nissan-Mitsubishi Alliance",
   "Mercedes-Benz Group","Hyundai Motor Group","Stellantis","Stellantis","Mazda","Renault-Nissan-Mitsubishi Alliance","Stellantis","Subaru Corporation","Honda Motor Company","Stellantis",
   "VW","Renault-Nissan-Mitsubishi Alliance","Suzuki Motor Corporation","GM","Toyota","BMW","Tatra","Stellantis","VW","Stellantis",
   "Tatra","Stellantis","Tesla","Mercedes-Benz Group","Stellantis","Renault-Nissan-Mitsubishi Alliance","Stellantis","Isuzu Motors","Iveco Group","Edison Motors",
-  "VW","ASTON MARTIN","GM","VW"
+  "VW","ASTON MARTIN","GM","VW","VW","Morgan Motor Company","Stellantis","Geely","BMW","Stellantis",
+  "NEVS","Mercedes-Benz Group","Renault-Nissan-Mitsubishi Alliance","Geely","Geely","SAIC Maxus Automotive","SAIC Maxus Automotive","Mclaren","TRI-STAR"
 ];
 
 $i=0;
@@ -29,7 +31,7 @@ while(! feof($file)){
     $arr=explode(",",$str);
     if($i>0){
         $kind=$arr[1];
-        $date=$arr[2];
+        $date=$arr[2]."-01";
         $count=$arr[4];
 
         if(!isset($arr[7])){
@@ -52,7 +54,7 @@ while(! feof($file)){
         }
 
         // Test for Multiple Word Makers
-        if(strpos($make,"LAND")!==false||strpos($make,"LR")!==false||strpos($make,"ALFA")!==false||strpos($make,"ASTON")!==false){
+        if($make=="LAND"||$make=="LR"||$make=="ALFA"||$make=="ROLLS"||$make=="ASTON"||$make=="LYNK"){
             // echo "<div style='color:red'>".$arr[7]."</div>";
             if(strpos($txt,"LAND ROVER")!==false){
                 $make="LAND ROVER";
@@ -63,20 +65,30 @@ while(! feof($file)){
             }else if(strpos($txt,"ASTON MARTIN")!==false){
                 $make="ASTON MARTIN";
                 $model=substr(trim($txt),12);
+            }else if(strpos($txt,"ROLLS ROYCE")!==false){
+                $make="ROLLS-ROYCE";
+                $model=substr(trim($txt),12);
+            }else if(strpos($txt,"LYNK & CO")!==false){
+                $make="LYNK & CO";
+                $model=substr(trim($txt),9);
             }else if(strpos($txt,"LR")!==false){
                 $make="LAND ROVER";
                 $model=substr(trim($txt),5);
             }else{
                 echo "NO MATCH: ".$make."**".$model."**";
             }
+        }else if(strpos($make,"AMAT")!==false){
+            $model="FABRIKAT";
         }
 
         // Test for Group
         $groupid=array_search($make,$thegroup);
+        if($make!="VW" && $make!="BMW") $make=ucfirst(strtolower($make));
+        $model=ucfirst(strtolower($model));
         if($groupid!==false){
             $group=$ingroup[$groupid];
-            echo $i." ".$date." ".$kind." ".$count." ".$make." ".$model." ".$group." ".$txt."\n";
-        }else if($model=="FABRIKAT"||$model==""){
+            echo $i." ".$date." ".$kind." ".$count." ".$make." ".$model." ".$group."\n";
+        }else if($model=="Fabrikat"||$model==""||$make==""||$make=="Tri-star"){
         }else{
             echo "NO GROUP: ".$make."\n";
             print_r($arr);
@@ -85,7 +97,7 @@ while(! feof($file)){
 
         
     }
-    if($i++==100) break;
+    $i++;
 }
 fclose($file);
 ?> 
