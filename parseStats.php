@@ -31,37 +31,30 @@ while(! feof($file)){
         $kind=$arr[1];
         $date=$arr[2];
         $count=$arr[4];
+
         if(!isset($arr[7])){
           $txt=trim($arr[6]);
         }else{
-          $txt=trim($arr[7]);
-          if(isset($arr[8])) $txt.=" ".$arr[8];
-          if(isset($arr[9])) $txt.=" ".$arr[9];
+          $txt=trim($arr[7]);          
         }
-        echo $txt;
-        $txtarr=explode(" ",$txt);
-        if(!isset($txtarr[1])){
-            $test=$txtarr[0];
-            if(strpos("MAZDA",$test)===0){
-                $make=substr($test,0,5);
-                $model=substr($test,4);
-            }else if(strpos("MASERATI",$test)===0){
-                $make="MASERATI";
-                $model="UNK";
-            }else{
-            }
+
+        if(strpos($txt," ")===false){
+            $make=$txt;
+            $model="UNK";
         }else{
-            $make=$txtarr[0];
-            $model=$txtarr[1];
+            $make=substr($txt,0,strpos($txt," "));
+            $model=substr($txt,strpos($txt," ")+1);
+        }
+
+        if($model=="UNK"&&strpos($txt,"MAZDA")===0){
+            $make=substr($txt,0,5);
+            $model=substr($txt,5);
         }
 
         // Test for Multiple Word Makers
         if(strpos($make,"LAND")!==false||strpos($make,"LR")!==false||strpos($make,"ALFA")!==false||strpos($make,"ASTON")!==false){
             // echo "<div style='color:red'>".$arr[7]."</div>";
-            if(strpos($txt,"RANGE")!==false){
-                $make="LAND ROVER";
-                $model="RANGE ROVER";
-            }else if(strpos($txt,"LAND ROVER")!==false){
+            if(strpos($txt,"LAND ROVER")!==false){
                 $make="LAND ROVER";
                 $model=substr(trim($txt),11);
             }else if(strpos($txt,"ALFA ROMEO")!==false){
@@ -70,8 +63,11 @@ while(! feof($file)){
             }else if(strpos($txt,"ASTON MARTIN")!==false){
                 $make="ASTON MARTIN";
                 $model=substr(trim($txt),12);
+            }else if(strpos($txt,"LR")!==false){
+                $make="LAND ROVER";
+                $model=substr(trim($txt),5);
             }else{
-                //echo "NO MATCH: ".$make."**".$model."**";
+                echo "NO MATCH: ".$make."**".$model."**";
             }
         }
 
@@ -89,7 +85,7 @@ while(! feof($file)){
 
         
     }
-    if($i++==3000) break;
+    if($i++==100) break;
 }
 fclose($file);
 ?> 
