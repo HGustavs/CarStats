@@ -76,6 +76,30 @@ while(! feof($file)){
         if($groupid!==false){
             $group=$ingroup[$groupid];
             echo $i." ".$date." ".$kind." ".$count." ".$make." ".$model." ".$group." ".$txt."\n";
+
+            /*
+            $query = $log_db->prepare('INSERT INTO issue(issueno,issuetime,issuetimed, issuetimeh, author, state, title, message) VALUES (:issueno,:issuetime,:issuetimed,:issuetimeh,:author,:state,:title,:message)');
+
+            if($issue->time!="undefined"){
+                $date1=date_create($issue->time);						
+            }else{
+                $date1=date_create("2014-01-01");;												
+            }
+            $date2=date_create("2014-01-01");
+            $interval=date_diff($date1,$date2);
+            $intervald=$interval->format("%a");
+            $intervalh=$interval->format("%h");
+                
+            $query->bindParam(':issueno', $issue->issueno);
+            $query->bindParam(':issuetime', $issue->time);
+            $query->bindParam(':author', $issue->issueauthor);
+            $query->bindParam(':state', $issue->state);
+            $query->bindParam(':title', $issue->issuetitle);
+            $query->bindParam(':message', $issue->message);
+            $query->bindParam(':issuetimeh', $intervalh);
+            $query->bindParam(':issuetimed', $intervald);
+            $query->execute();            
+            */
         }else if($model=="FABRIKAT"||$model==""){
         }else{
             echo "NO GROUP: ".$make."\n";
