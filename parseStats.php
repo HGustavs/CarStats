@@ -5,7 +5,7 @@
 $file = fopen("Stats.csv","r");
 
 $log_db = new PDO('sqlite:./CarStats.db');
-$sql = 'CREATE TABLE IF NOT EXISTS RegData(id INTEGER PRIMARY KEY,period DATETIME,make VARCHAR(30),model VARCHAR(30),grp VARCHAR(30),cnt INTEGER);';
+$sql = 'CREATE TABLE IF NOT EXISTS RegData(id INTEGER PRIMARY KEY,period DATETIME,kind VARCHAR(30),make VARCHAR(30),model VARCHAR(30),grp VARCHAR(30),cnt INTEGER);';
 $log_db->exec($sql);
 
 $thegroup=[
@@ -91,29 +91,16 @@ while(! feof($file)){
             $group=$ingroup[$groupid];
             // echo $i." ".$date." ".$kind." ".$count." ".$make." ".$model." ".$group." ".$txt."\n";
 
-            /*
-            $query = $log_db->prepare('INSERT INTO issue(issueno,issuetime,issuetimed, issuetimeh, author, state, title, message) VALUES (:issueno,:issuetime,:issuetimed,:issuetimeh,:author,:state,:title,:message)');
+            $query = $log_db->prepare('INSERT INTO RegData(id,kind,period,make, model, grp, cnt) VALUES (:id,:kind,:period,:make,:model,:grp,:cnt)');
 
-            if($issue->time!="undefined"){
-                $date1=date_create($issue->time);						
-            }else{
-                $date1=date_create("2014-01-01");;												
-            }
-            $date2=date_create("2014-01-01");
-            $interval=date_diff($date1,$date2);
-            $intervald=$interval->format("%a");
-            $intervalh=$interval->format("%h");
-                
-            $query->bindParam(':issueno', $issue->issueno);
-            $query->bindParam(':issuetime', $issue->time);
-            $query->bindParam(':author', $issue->issueauthor);
-            $query->bindParam(':state', $issue->state);
-            $query->bindParam(':title', $issue->issuetitle);
-            $query->bindParam(':message', $issue->message);
-            $query->bindParam(':issuetimeh', $intervalh);
-            $query->bindParam(':issuetimed', $intervald);
+            $query->bindParam(':id', $i);
+            $query->bindParam(':kind', $kind);
+            $query->bindParam(':period', $date);
+            $query->bindParam(':make', $make);
+            $query->bindParam(':model', $model);
+            $query->bindParam(':grp', $grp);
+            $query->bindParam(':cnt', $count);
             $query->execute();            
-            */
         }else{
             echo "NO GROUP: ".$make."\n";
             print_r($arr);
