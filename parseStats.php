@@ -34,7 +34,9 @@ while(! feof($file)){
         $date=$arr[2]."-01";
         $count=$arr[4];
 
-        $periodi=((intval(substr(0,4))-2013)*12)+intval(substr(5,2));
+        $periodi=((intval(substr($date,0,4))-2014)*12)+intval(substr($date,5,2));
+
+        echo " ".intval(substr($date,5,2))."\n";
 
         if(!isset($arr[7])){
           $txt=trim($arr[6]);
