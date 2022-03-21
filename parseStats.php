@@ -5,7 +5,7 @@
 $file = fopen("Stats.csv","r");
 
 $log_db = new PDO('sqlite:./CarStats.db');
-$sql = 'CREATE TABLE IF NOT EXISTS RegData(id INTEGER PRIMARY KEY,period DATETIME,kind VARCHAR(30),make VARCHAR(30),model VARCHAR(30),grp VARCHAR(30),cnt INTEGER);';
+$sql = 'CREATE TABLE IF NOT EXISTS RegData(id INTEGER PRIMARY KEY,period DATETIME,kind VARCHAR(30),make VARCHAR(30),model VARCHAR(30),grp VARCHAR(30),cnt INTEGER, periodi INTEGER);';
 $log_db->exec($sql);
 
 $thegroup=[
@@ -33,6 +33,8 @@ while(! feof($file)){
         $kind=$arr[1];
         $date=$arr[2]."-01";
         $count=$arr[4];
+
+        $periodi=((intval(substr(0,4))-2013)*12)+intval(substr(5,2));
 
         if(!isset($arr[7])){
           $txt=trim($arr[6]);
@@ -91,7 +93,7 @@ while(! feof($file)){
             $group=$ingroup[$groupid];
             // echo $i." ".$date." ".$kind." ".$count." ".$make." ".$model." ".$group." ".$txt."\n";
 
-            $query = $log_db->prepare('INSERT INTO RegData(id,kind,period,make, model, grp, cnt) VALUES (:id,:kind,:period,:make,:model,:grp,:cnt)');
+            $query = $log_db->prepare('INSERT INTO RegData(id,kind,period,make, model, grp, cnt,periodi) VALUES (:id,:kind,:period,:make,:model,:grp,:cnt,:periodi)');
 
             $query->bindParam(':id', $i);
             $query->bindParam(':kind', $kind);
@@ -100,6 +102,7 @@ while(! feof($file)){
             $query->bindParam(':model', $model);
             $query->bindParam(':grp', $grp);
             $query->bindParam(':cnt', $count);
+            $query->bindParam(':periodi', $periodi);            
             $query->execute();            
         }else{
             echo "NO GROUP: ".$make."\n";
