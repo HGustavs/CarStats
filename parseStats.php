@@ -85,9 +85,11 @@ while(! feof($file)){
         $groupid=array_search($make,$thegroup);
         if($make!="VW" && $make!="BMW") $make=ucfirst(strtolower($make));
         $model=ucfirst(strtolower($model));
-        if($groupid!==false){
+        if($model=="Fabrikat"||$make==""||strpos($txt,"BYGGE")!==false){
+
+        }else if($groupid!==false){
             $group=$ingroup[$groupid];
-            echo $i." ".$date." ".$kind." ".$count." ".$make." ".$model." ".$group." ".$txt."\n";
+            // echo $i." ".$date." ".$kind." ".$count." ".$make." ".$model." ".$group." ".$txt."\n";
 
             /*
             $query = $log_db->prepare('INSERT INTO issue(issueno,issuetime,issuetimed, issuetimeh, author, state, title, message) VALUES (:issueno,:issuetime,:issuetimed,:issuetimeh,:author,:state,:title,:message)');
@@ -112,7 +114,6 @@ while(! feof($file)){
             $query->bindParam(':issuetimed', $intervald);
             $query->execute();            
             */
-        }else if($model=="FABRIKAT"||$model==""){
         }else{
             echo "NO GROUP: ".$make."\n";
             print_r($arr);
